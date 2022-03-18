@@ -362,16 +362,11 @@ namespace DescriptionCleaning {
 		}
 
 		private string getFilesFolderPath(Game game) {
-			return "R:/Playnite/library/files/" + game.Id + "/";
+			return "V:/Playnite/library/files/" + game.Id + "/";
 		}
 
 		private void CleanImage(HtmlNode image, string folderPath) {
 			try {
-				if (image.Attributes["src"].Value.StartsWith("file://")) {
-					image.Attributes["src"].Value = image.Attributes["src"].Value.Replace("file:///R:/Playnite", "file:///V:/Playnite");
-					return;
-				}
-
 				HtmlAttributeCollection attributes = image.Attributes;
 				foreach (HtmlAttribute attr in attributes.ToList()) {
 					if (attr.Name == "src" || attr.Name == "alt" || attr.Name == "width") {
