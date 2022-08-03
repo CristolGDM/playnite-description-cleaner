@@ -367,6 +367,7 @@ namespace DescriptionCleaning {
 
 		private void CleanImage(HtmlNode image, string folderPath) {
 			try {
+				LogMessage(image.Attributes.ToString());
 				HtmlAttributeCollection attributes = image.Attributes;
 				foreach (HtmlAttribute attr in attributes.ToList()) {
 					if (attr.Name == "src" || attr.Name == "alt" || attr.Name == "width") {
