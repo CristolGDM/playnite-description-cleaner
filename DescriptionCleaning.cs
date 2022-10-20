@@ -314,14 +314,21 @@ namespace DescriptionCleaning {
 							}
 						}
 						else {
-							HtmlNode image = htmlDoc.DocumentNode.SelectNodes("//img")[0];
-							if (image.Attributes["width"] == null) {
-								image.Attributes.Add("width", "100%");
+              HtmlNode image = htmlDoc.DocumentNode.SelectNodes("//img")[0];
+
+              string[] noResizePlatforms = new string[] { "Game Boy", "Game Gear" };
+							if (game.Platforms.Any(platform => noResizePlatforms.Any(x => platform.Name.Contains(x)))) {
+								image.Attributes.Remove("width");
 							}
 							else {
-								image.Attributes["width"].Value = "100%";
+								if (image.Attributes["width"] == null) {
+									image.Attributes.Add("width", "100%");
+								}
+								else {
+									image.Attributes["width"].Value = "100%";
+								}
 							}
-							if(game.TagIds != null && game.TagIds.Contains(needsImageTag.Id)) {
+							if (game.TagIds != null && game.TagIds.Contains(needsImageTag.Id)) {
 								game.TagIds.Remove(needsImageTag.Id);
               }
 						}
@@ -367,10 +374,12 @@ namespace DescriptionCleaning {
 
 		private void CleanImage(HtmlNode image, string folderPath) {
 			try {
-				LogMessage(image.Attributes.ToString());
 				HtmlAttributeCollection attributes = image.Attributes;
 				foreach (HtmlAttribute attr in attributes.ToList()) {
-					if (attr.Name == "src" || attr.Name == "alt" || attr.Name == "width") {
+          if (attr.Name == "src" || attr.Name == "data-src") {
+            LogMessage(attr.Name + "=" + attr.Value);
+          }
+          if (attr.Name == "src" || attr.Name == "alt" || attr.Name == "width") {
 						continue;
 					}
 					if (attr.Name == "data-src") {
@@ -395,6 +404,7 @@ namespace DescriptionCleaning {
 				}
 				image.Attributes["src"].Value = "file:///" + folderPath + imageName;
 			} catch(Exception e) {
+				HtmlAttributeCollection attributes = image.Attributes;
 				Error(e.ToString());
 				throw (e);
       }
