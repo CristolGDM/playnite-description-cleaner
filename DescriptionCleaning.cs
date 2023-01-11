@@ -449,6 +449,11 @@ namespace DescriptionCleaning {
 		}
 
 		private string LastCleanHtml(string htmlContent) {
+			String style = "<style>h2 {color: #43C2DA!important;}\n</style>";
+
+            if (!htmlContent.StartsWith(style)) {
+				htmlContent = style + htmlContent;
+			}
 			htmlContent = htmlContent.Replace("<br>&nbsp;</br>", "");
 			htmlContent = htmlContent.Replace("<br> &nbsp;</br>", "");
 			htmlContent = htmlContent.Replace("<br>&nbsp; </br>", "");
