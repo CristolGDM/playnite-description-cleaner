@@ -344,8 +344,15 @@ namespace DescriptionCleaning {
 							}
 						}
 					});
-					
-					string result = LastCleanHtml(body.InnerHtml);
+
+					HtmlNodeCollection allH1 = htmlDoc.DocumentNode.SelectNodes("//h1");
+					if (allH1 != null) {
+						foreach (HtmlNode h1 in allH1.Skip(1)) {
+							h1.Name = "h3";
+						}
+                    }
+
+                    string result = LastCleanHtml(body.InnerHtml);
 
 					if (result.Length == 0 || removeWhitespaceRegex.Replace(result, "").Length == 0) {
 						throw new Exception("Description is empty");
@@ -453,9 +460,10 @@ namespace DescriptionCleaning {
 
             if (!htmlContent.StartsWith(style)) {
 				htmlContent = style + htmlContent;
-			}
-			htmlContent = htmlContent.Replace("<br>&nbsp;</br>", "");
-			htmlContent = htmlContent.Replace("<br> &nbsp;</br>", "");
+            }
+
+            htmlContent = htmlContent.Replace("<br>&nbsp;</br>", "");
+            htmlContent = htmlContent.Replace("<br> &nbsp;</br>", "");
 			htmlContent = htmlContent.Replace("<br>&nbsp; </br>", "");
 
 			htmlContent = htmlContent.Replace("<p> </p>", "");
